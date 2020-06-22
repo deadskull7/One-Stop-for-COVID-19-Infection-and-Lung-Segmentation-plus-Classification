@@ -297,7 +297,7 @@ if num == 'six':
  </tr>
  <tr>
     <td><img src="pics/4 dices df.PNG" width="300" height="300" /></td>
-    <td><img src="pics/4 dice report.PNG" width="700" height="70" /></td>
+    <td><img src="pics/4 dice report.PNG" width="700" height="50" /></td>
  </tr>
 </table>
 
@@ -308,7 +308,7 @@ if num == 'six':
  </tr>
  <tr>
     <td><img src="pics/4 iou df.PNG" width="300" height="300" /></td>
-    <td><img src="pics/4 iou report.PNG" width="700" height="70" /></td>
+    <td><img src="pics/4 iou report.PNG" width="700" height="50" /></td>
  </tr>
 </table>
 
@@ -319,7 +319,7 @@ if num == 'six':
  </tr>
  <tr>
     <td><img src="pics/4 precision df.PNG" width="300" height="300" /></td>
-    <td><img src="pics/4 precision report.PNG" width="700" height="70" /></td>
+    <td><img src="pics/4 precision report.PNG" width="700" height="50" /></td>
  </tr>
 </table>
 
@@ -330,7 +330,7 @@ if num == 'six':
  </tr>
  <tr>
     <td><img src="pics/4 recall df.PNG" width="300" height="300" /></td>
-    <td><img src="pics/4 recall report.PNG" width="700" height="70" /></td>
+    <td><img src="pics/4 recall report.PNG" width="700" height="50" /></td>
  </tr>
 </table>
 

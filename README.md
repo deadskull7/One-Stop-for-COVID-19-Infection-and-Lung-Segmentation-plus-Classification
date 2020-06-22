@@ -5,7 +5,7 @@ The project is a complete COVID-19 detection package comprising of 3 tasks:<br /
 ➤ **Task 1:** COVID-19 Infection Segmentation<br />
 ➤ **Task 2:** COVID-19 Classification<br />
 ➤ **Task 3:** Lung Segmentation<br />
-
+ 
 <table border="0">
  <tr>
     <td><b style="font-size:30px">Sample data</b></td>

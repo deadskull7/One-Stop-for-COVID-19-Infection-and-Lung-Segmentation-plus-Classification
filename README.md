@@ -1,1 +1,483 @@
-# One-Stop-for-COVID-19-Infection-and-Lung-Segmentation-plus-Classification
+# ✋🏼🛑 One-Stop-for-COVID-19-Infection-and-Lung-Segmentation-plus-Classification
+
+The project is a complete COVID-19 detection package comprising of 3 tasks:<br />
+<br />
+➤ **Task 1:** COVID-19 Infection Segmentation<br />
+➤ **Task 2:** COVID-19 Classification<br />
+➤ **Task 3:** Lung Segmentation<br />
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Sample data</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/sample_data.png" width="1200" height="275" /></td>
+ </tr>
+</table>
+
+
+#### -----------------------------------------------------------------------------------------------------------------------------------------
+
+### ➥ <ins> Some Instructions and Guidelines for Code Execution </ins>
+1. All scripts are exactly the same with the notebooks having same titles.
+2. Any necessary package to be installed is placed on top of each of the six scripts/notebooks.
+3. Scripts/Notebooks are using kaggle and Colab collectively, so will contain some exclusive operations as per the platform like importing data from kaggle to colab needs a unique API key, mounting drive and authentication, etc
+
+
+#### -----------------------------------------------------------------------------------------------------------------------------------------
+
+
+### ➥ <ins> Following are the details about the scripts/notebooks </ins>
+
+★ **task1_preprocessing_plus_unet_with_comments.py** ---> Contains the maximum number of comments and explanation. Any doubt, if persists probably could be rectified here. It contains the UNet training for infection mask prediction (Task- 1)
+
+★ **task1_crossval_3folds_unet.py** --> Contains the cross-validation (3-folds) for TASK-1. 
+
+★ **task1_crossval_4folds_unet.py** --> Contains the cross-validation (4-folds) for TASK-1.
+
+★ **task1_unet_plus_plus.py** --> Contains the unet++ training for TASK-1. 
+
+★ **task2_covid19_classifcation.py** --> Contains the covid-19 classification (TASK-2).
+
+★ **task3_lung_segmentation_unet.py** --> Contains Unet training for lung segmentation (TASK-3).
+
+★ **app.py** --> Contains a runner code for running any file listed above.
+
+```python
+
+# app.py
+
+from task1_crossval_3folds_unet import *
+from task1_crossval_4folds_unet import *
+from task1_preprocessing_plus_unet_with_comments import *
+from task1_unet_plus_plus import *
+from task2_covid19_classifcation import *
+from task3_lung_segmentation_unet import *
+
+
+print("\n\n\n\n")
+print("--------------------------------------------------------------------------------------")
+print(" 'one' --> Task1: 3-fold cross-validation UNet (Infection Segmentation)")
+print(" 'two' --> Task1: 4-fold cross-validation UNet (Infection Segmentation)")
+print(" 'three' --> Task1: UNet original holdout method (Infection Segmentation)")
+print(" 'four' --> Task1: UNet++ holdout method (Infection Segmentation)")
+print(" 'five' --> Task2: COVID-19 Classification")
+print(" 'six' --> Task3: Lung Segmentation")
+print("--------------------------------------------------------------------------------------")
+print("\n\n\n\n\n")
+
+
+print("Enter from one of the {'one', 'two', 'three', 'four', 'five', 'six', 'seven'}")
+num = input()
+
+
+if num == 'one':
+	three_fold_runner_unet_infection_segmentation()
+    
+
+if num == 'two':
+	four_fold_runner_unet_infection_segmentation()
+
+
+if num == 'three':
+	holdout_runner_unet_infection_segmentation()
+
+
+if num == 'four':
+	holdout_runner_unetplusplus_infection_segmentation()
+
+
+if num == 'five':
+	runner_classification()
+
+
+if num == 'six':
+	runner_lung_segmentation()
+```
+
+#### -----------------------------------------------------------------------------------------------------------------------------------------
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px"></b></td>
+    <td><b style="font-size:30px"></b></td>
+ </tr>
+ <tr>
+    <td><img src="https://media.giphy.com/media/f8V1i0JBW5DYR6JfbN/giphy.gif" width="400" height="300" /></td>
+    <td><img src="https://media.giphy.com/media/LLHkw7UnvY3Kw/giphy.gif" width="400" height="300" /></td>
+ </tr>
+</table> 
+
+*Note: Not all are displayed here, rest could be fetched after running notebooks*
+
+#### -----------------------------------------------------------------------------------------------------------------------------------------
+# Preprocessing Stage
+
+1.) Removing incomplete and fauty images <br />
+2.) Separate model for empty mask prediction <br />
+3.) Use of Contrast Limited Adaptive Histogram Equalization (
+) for image enhancement <br />
+4.) Cropping the Region of Interst (ROI) using Otsu's binarization and other approaches <br />
+5.) Data Augmentation <br />
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Cropping out contour with the largest area</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/cropper.JPG" width="1000" height="300" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">CLAHE only Output</b></td>
+    <td><b style="font-size:30px">Before-After Image (after all preprocessing steps)</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/CLAHE.JPG" width="500" height="500" /></td>
+    <td><img src="pics/before_after_preprocessing.PNG" width="500" height="300" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Augmentated CT Scans (Task: 1)</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/new_aug_cts.png" widthcts_aug_again.png="1000" height="150" /></td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Augmented Infections Masks (Task: 1)</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/new_aug_infections.png" width="1000" height="150" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Augmentated CT Scans (Task: 3)</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/cts_aug_again.png" widthcts_aug_again.png="1000" height="150" /></td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Augmented Lung Masks (Task: 3)</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/lungs_aug_again.png" width="1000" height="150" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">DICE v/s IOU and some relationship </b></td>
+    <td><b style="font-size:30px"></b></td>
+ </tr>
+ <tr>
+    <td>• Dice (S) = 2|𝐴∩𝐵|)/(|𝐴|  + |𝐵|) = 2𝑇𝑃/(2𝑇𝑃+𝐹𝑃+𝐹𝑁) <br/> 
+	• IOU (J) = (|𝐴∩𝐵|)/(|𝐴∪𝐵|) = 𝑇𝑃/(𝑇𝑃+𝐹𝑃+𝐹𝑁) <br/>
+	• J = S/(S-2) <br/>
+	• 𝜕𝐽/𝜕𝑆 = 2/[(2 −𝑠)]^2  <br/>
+	    <br/>
+	    • <b>Interpretations:</b> <br/>
+	<br/>
+	    • We can say that IOU(J) is always more punishing or has less value than the corresponding dice(S) at the same threshold. <br/> <br/>
+	    • Another takeaway is that 𝜕𝐽/𝜕𝑆 = 2/[(2 −𝑠)]^2 which is basically the slope and is a continuous 
+    increasing function for  S ∈ [0,1]. <br/> <br/>
+	    • For (S = 0.586, J = 0.414), the value of slope equals to 1. <br/> <br/>
+	    • Above two points combinedly establishes a relationship that for all S > 0.586, 
+    rate of increase of IOU is greater than the dice whereas for all S < 0.586, the rate of increase 
+    of dice is greater than the IOU. <br/> <br/>
+	</td>
+    <td><img src="pics/vennd.PNG" width="750" height="300" /></td>
+ </tr>
+</table>
+
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px"></b></td>
+    <td><b style="font-size:30px"></b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/dics vs iou.PNG" width="500" height="400" /></td>
+    <td><img src="pics/delj by s.PNG" width="500" height="400" /></td>
+ </tr>
+</table>
+
+
+# Training Stage 
+(Remains same for all tasks)
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Exponential decaying LR (Step and continuous)</b></td>
+    <td><b style="font-size:30px">Exponential decaying LR (Step and continuous) with Variation</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/exponential lrs.JPG" width="500" height="300" /></td>
+    <td><img src="pics/expo LR variations.PNG" width="500" height="300" /></td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Cosine Annealing Cyclical LR</b></td>
+    <td><b style="font-size:30px">Blend of Cosine Annealing and Exponential Decay</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/cosine_only.PNG" width="500" height="300" /></td>
+    <td><img src="pics/cosine_expo.PNG" width="500" height="300" /></td>
+ </tr>
+</table>
+
+# Results with UNet (Task: 1)
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Trianing curve for Dice Coefficient</b></td>
+    <td><b style="font-size:30px">Training curve for BCE + Dice Loss</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/Best training curve_dice.png" width="400" height="300" /></td>
+    <td><img src="pics/Best training curve_loss.png" width="400" height="300" /></td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Optimizing threshold with small step size</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/Infection mask_Optimizing threshold more in best threshold segment.JPG" width="1000" height="300" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Precision and recall curves v/s thresholds</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/Infections mask_Precision and Recall.JPG" width="550" height="400" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Some Actual Vs Predicted Masks</b></td>
+    <td><b style="font-size:30px">Some Actual Vs Predicted Masks</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/new infection predictions1.PNG" width="500" height="500" /></td>
+    <td><img src="pics/new infection predictions2.PNG" width="500" height="500" /></td>
+ </tr>
+</table>
+
+# 4-Fold Cross-validation Results on Task: 1 (UNet)
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">4-fold threshold vs split number dataframe for DICE</b></td>
+    <td><b style="font-size:30px">Brief report acquired from dataframe</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/4 dices df.PNG" width="300" height="300" /></td>
+    <td><img src="pics/4 dice report.PNG" width="700" height="70" /></td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">4-fold threshold vs split number dataframe for IOU</b></td>
+    <td><b style="font-size:30px">Brief report acquired from dataframe</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/4 iou df.PNG" width="300" height="300" /></td>
+    <td><img src="pics/4 iou report.PNG" width="700" height="70" /></td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">4-fold threshold vs split number dataframe for PRECISION</b></td>
+    <td><b style="font-size:30px">Brief report acquired from dataframe</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/4 precision df.PNG" width="300" height="300" /></td>
+    <td><img src="pics/4 precision report.PNG" width="700" height="70" /></td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">4-fold threshold vs split number dataframe for RECALL</b></td>
+    <td><b style="font-size:30px">Brief report acquired from dataframe</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/4 recall df.PNG" width="300" height="300" /></td>
+    <td><img src="pics/4 recall report.PNG" width="700" height="70" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Some Actual v/s Predicted Masks by 4 Unet models of 4-fold Cross-Validation</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/4fold predicted vs actual.PNG" width="900" height="600" /></td>
+ </tr>
+</table>
+
+
+# Results with UNet++ (Task: 1)
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Training curve for Dice Coefficient</b></td>
+    <td><b style="font-size:30px">Training curve for BCE + Dice Loss</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/training dice unetpp.png" width="350" height="300" /></td>
+    <td><img src="pics/training loss unetpp.png" width="350" height="300" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Optimizing threshold with small step size</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/threshold unetpp2.PNG" width="800" height="300" /></td>
+ </tr>
+</table>
+
+
+# Results with CNN (Task: 2)
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Classification loss curve</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/loss curve classification.png" width="600" height="380" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Distribution of TN, TP, FN, FP with Threshold 0.50</b></td>
+    <td><b style="font-size:30px">Distribution of TN, TP, FN, FP with Best Threshold 0.81</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/distribution 0.5.PNG" width="500" height="400" /></td>
+    <td><img src="pics/distribution 0.81.PNG" width="500" height="400" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">ROC Curve with Threshold 0.50</b></td>
+    <td><b style="font-size:30px">ROC Curve with Threshold 0.81</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/roc 0.5.PNG" width="500" height="500" /></td>
+    <td><img src="pics/roc 0.81.PNG" width="500" height="500" /></td>
+ </tr>
+</table>
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Confusion matrix with Threshold 0.50</b></td>
+    <td><b style="font-size:30px">Confusion matrix with Best Threshold 0.81</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/cm 0.5.PNG" width="500" height="550" /></td>
+    <td><img src="pics/cm 0.81.PNG" width="500" height="550" /></td>
+ </tr>
+</table>
+
+
+# Results with UNet (Task: 3)
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Training curve for Dice Coefficient</b></td>
+    <td><b style="font-size:30px">Training curve for BCE + Dice Loss</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/Lung mask training dice curve.jpg" width="350" height="300" /></td>
+    <td><img src="pics/Lung mask training loss curve.jpg" width="350" height="300" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Optimizing threshold with small step size</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/threshold 2 lung seg.PNG" width="1000" height="300" /></td>
+ </tr>
+</table>
+
+
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Actual v/s Predicted Lung Masks</b></td>
+    <td><b style="font-size:30px">Actual v/s Predicted Lung Masks</b></td>
+ </tr>
+ <tr>
+    <td><img src="pics/predicted vs actual lung seg.PNG" width="500" height="500" /></td>
+    <td><img src="pics/predicted vs actual lung seg2.PNG" width="500" height="500" /></td>
+ </tr>
+</table>
+
+`
+`
+`
+`
+`
+` 
+`
+`
+# License
+MIT License
+
+Copyright (c) 2020 Rohit Verma
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
